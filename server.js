@@ -59,7 +59,34 @@ app.post('/register', (req,res) => {
     res.json(database.users[database.users.length -1])
 })
 
+app.get('/profile/:id', (req,res) => {
+    const { id } = req.params;
+    let match = false;
+    database.users.forEach(user => {
+        if (user.id === id){
+            match = true;
+            return res.json(user);
+        }
+    });
+    if (!match){
+        res.status(404).json('User not found');
+    }
+});
 
+app.post('/image', (req,res) => {
+    const { id } = req.body;
+    let match = false;
+    database.users.forEach(user => {
+        if (user.id === id){
+            match = true;
+            user.entries++;
+            return res.json(user.entries);
+        }
+    });
+    if (!match){
+        res.status(404).json('User not found');
+    }
+})
 
 //Start listening
 app.listen(3000, () => {
