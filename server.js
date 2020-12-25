@@ -38,8 +38,8 @@ app.get('/', (req, res) => {
 
 app.post('/signin', (req,res) => {
     if (req.body.email === database.users[0].email &&  req.body.password === database.users[0].password){
-        console.log(database.users[0].password);
-        res.json('this is working!') 
+        console.log('logged in successfully');
+        res.json(database.users[0]); 
     } else {
         res.status(400).json('error logging in');
         console.log(req.body)
@@ -56,6 +56,7 @@ app.post('/register', (req,res) => {
         entries: 0,  
         joined: new Date()
     });
+    console.log('registered user');
     res.json(database.users[database.users.length -1])
 })
 
@@ -92,11 +93,3 @@ app.post('/image', (req,res) => {
 app.listen(3000, () => {
     console.log('App running on port 3000')
 });
-
-/*
-/ => user list
-/signin => POST, success/fail
-/register => POST, return user
-/profile/:userid => GET user
-/image => PUT, return updated user
-*/
