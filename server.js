@@ -2,6 +2,21 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const knex = require('knex');
+
+const db = knex({
+    client: 'pg',
+    connection: {
+      host : '127.0.0.1',
+      user : 'jamescockayne',
+      password : '',
+      database : 'facial-recognition'
+    }
+});
+
+db.select('*').from('users').then(data => {
+
+})
 
 const app = express();
 
@@ -48,16 +63,18 @@ app.post('/signin', (req,res) => {
 
 app.post('/register', (req,res) => {
     const { email, name, password } = req.body;
-    database.users.push({
-        id: '125',
-        name: name,
-        email: email,
-        password: password,   
-        entries: 0,  
-        joined: new Date()
-    });
+    db('users')
+        .returning('*')
+        .insert({
+            email: email,
+            name: name,
+            joined: new Date()
+        })
+        .then(user => res.json(user[0]))
+        .catch(err => res.status(400).json('Unable to register... Sorry about that.'));
+
     console.log('registered user');
-    res.json(database.users[database.users.length -1])
+    
 })
 
 app.get('/profile/:id', (req,res) => {
