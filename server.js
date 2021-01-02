@@ -94,17 +94,18 @@ app.get('/profile/:id', (req,res) => {
 
 app.put('/image', (req,res) => {
     const { id } = req.body;
-    let match = false;
-    database.users.forEach(user => {
-        if (user.id === id){
-            match = true;
-            user.entries++;
-            return res.json(user.entries);
-        }
-    });
-    if (!match){
-        res.status(404).json('User not found');
-    }
+    db('users')
+        .where('id', '=', id)
+        .increment('entries', 1)
+        .returning('entries')
+        .then(entries => {
+            if (entries.length){
+                res.json(entries[0])
+            } else {
+                res.status(400).json('no such user')
+            }      
+        })
+        .catch(error => console.log)
 })
 
 //Start listening
