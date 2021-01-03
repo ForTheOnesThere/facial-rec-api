@@ -1,3 +1,9 @@
+const Clarifai = require('clarifai');
+
+const app = new Clarifai.App({
+    apiKey: 'c007e471b8af4559b776fc9aee35317b'
+   });
+
 const handleImage = (req, res, db) => {
     
     //increment the user's entries count, and return either the new entry count, or an error
@@ -16,6 +22,14 @@ const handleImage = (req, res, db) => {
         .catch(error => console.log)
 }
 
+const handleAPI = (req, res) => {
+    app.models.initModel({id: Clarifai.FACE_DETECT_MODEL})
+      .then(generalModel => generalModel.predict(req.body.url))
+      .then(data => res.json(data))
+      .catch(error => res.status(400).json('Problem fetching from API'))
+}
+
 module.exports = {
-   handleImage: handleImage
+   handleImage: handleImage,
+   handleAPI: handleAPI
 }
