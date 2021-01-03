@@ -1,7 +1,10 @@
 const handleRegister = (req, res, db, bcrypt) => {
 
-    //get the input from the request body, and hash the password string
+    //get the input from the request body, validate inputs exist, and hash the password string
     const { email, name, password } = req.body;
+    if (!email || !name || !password) {
+        return res.status(400).json('Incorrect input')
+    }
     const hash = bcrypt.hashSync(password);
 
     //begin a transaction, so that the login and user tables only update if both operations are successful
