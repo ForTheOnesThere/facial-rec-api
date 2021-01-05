@@ -19,7 +19,8 @@ const db = knex({
       ssl: {
         rejectUnauthorized: false
     }
-});
+    }
+  });
 
 //Start the express server
 const app = express();
