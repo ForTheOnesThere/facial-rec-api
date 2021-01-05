@@ -22,6 +22,7 @@ const db = knex({
 
 //Start the express server
 const app = express();
+console.log(process.env.DATABASE_URL)
 
 //Middleware
 app.use(cors());
