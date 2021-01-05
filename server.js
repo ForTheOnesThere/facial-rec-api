@@ -15,10 +15,8 @@ const { handleProfile } = require('./controllers/profile.js');
 const db = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
-      user : 'jamescockayne',
-      password : '',
-      database : 'facial-recognition'
+      connectionString : process.env.DATABASE_URL,
+      ssl: true
     }
 });
 
